@@ -1,0 +1,2 @@
+FIXING THE ERROR
+- Next Time Try Scrolling to the bottom and then apply the find_element using XPATH
