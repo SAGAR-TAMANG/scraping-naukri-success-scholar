@@ -1,0 +1,3 @@
+- What exactly are the data to be collected?
+- What exactly are the output to be presented? 
+- And how should we present it? 
