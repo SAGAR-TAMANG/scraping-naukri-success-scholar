@@ -40,7 +40,7 @@ soup = BeautifulSoup(driver.page_source,'html5lib')
 results = soup.find(class_='list')
 job_elems=results.find_all('article', class_='jobTuple')
 
-pages = np.arange(0,10000)
+pages = np.arange(0,500) #20 each page
 
 # print(job_elems)
 # for x in range(0,pages):
