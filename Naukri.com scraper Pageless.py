@@ -5,6 +5,8 @@ import time
 import pandas as pd
 import numpy as np
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+
 
 # pages = int(input('NUMBER OF PAGES WORTH OF DATA: '))
 
@@ -18,7 +20,9 @@ url = "https://www.naukri.com/jobs-in-india"
 
 # Making the Driver Headless: (next 3 lines)
 driver = webdriver.Chrome()
-driver.headless = True
+# options = Options()
+# options.add_argument("--headless=new")
+# driver = webdriver.Chrome(options=options)
 
 # time.sleep(3)
 
@@ -56,7 +60,10 @@ for pages in pages:
     # print("Company: " + Company.text)
 
     E = job_elem.find('span', class_='ellipsis fleft expwdth')
-    Exp=E.text
+    if E is None:
+      Exp = "Not-Mentioned"
+    else:
+      Exp = E.text
     print(Exp)
     # print('Experience: ' + Exp.text)
     # print(" "*2)
@@ -83,12 +90,15 @@ for pages in pages:
   # script = 'your JavaScript goes here'
   # element = driver.find_element_by_*('your element identifier goes here')
   # driver.execute_script(script, element)
-  time.sleep(10)
   driver.find_element(By.XPATH, '/html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]  ').click()
   # /html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]
   # //*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]
-  time.sleep(10)
 
+  time.sleep(0.5)
+
+
+time.sleep(15)
+driver.close()
 
 
 
