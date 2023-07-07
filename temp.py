@@ -5,29 +5,16 @@ import time
 import pandas as pd
 import numpy as np
 
-pages = np.arange(1,11)
+#testing the scrollling
+
 dff = pd.DataFrame(columns=['Job Title','Posted', 'Company','URL'])
 
+driver = webdriver.Chrome()
 
-for pages in pages:
-  url = "https://www.naukri.com/it-jobs" + "-" + str(pages)
-  # Observation: Page1: https://www.naukri.com/it-jobs?k=it Page2: https://www.naukri.com/it-jobs-2
+driver.get('https://quotes.toscrape.com/')
 
-  page = requests.get(url)
-  # print(page.text)
+time.sleep(1)
 
-  driver = webdriver.Chrome()
-  driver.get(url)
+driver.execute_script("window.scrollTo(0, Y)")
 
-  time.sleep(3)
-
-  soup = BeautifulSoup(driver.page_source,'html5lib')
-
-  # print(soup.prettify())
-
-  driver.close()
-
-  results = soup.find(class_='list')
-  job_elems=results.find_all('article', class_='jobTuple')
-
-  print(job_elems)
+time.sleep(3)

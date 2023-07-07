@@ -74,9 +74,13 @@ for pages in pages:
     dff.to_excel("All_Output.xlsx", index = False)
     
     print(dff)
-    
-  driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]/span').click()
-  time.sleep(3)
+
+    driver.execute_script("window.scrollTo(0, Y)")
+
+    time.sleep(3)
+
+    driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]/span').click()
+    time.sleep(3)
 
 
 
