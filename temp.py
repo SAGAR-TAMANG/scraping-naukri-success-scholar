@@ -15,6 +15,6 @@ driver.get('https://quotes.toscrape.com/')
 
 time.sleep(1)
 
-driver.execute_script("window.scrollTo(0, Y)")
+driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
 
-time.sleep(3)
+time.sleep(5)

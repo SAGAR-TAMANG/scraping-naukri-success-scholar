@@ -57,6 +57,7 @@ for pages in pages:
 
     E = job_elem.find('span', class_='ellipsis fleft expwdth')
     Exp=E.text
+    print(Exp)
     # print('Experience: ' + Exp.text)
     # print(" "*2)
 
@@ -65,22 +66,28 @@ for pages in pages:
 
     # df=df.append({'Title':Title, 'Company':Company,'URL':URL}, ignore_index = True)
     # df = pd.DataFrame([[Title, Company, URL]], columns=['Title','Company','URL'])
-    dff = pd.concat([dff, pd.DataFrame([[Title, History, Company, URL]], columns = ['Job Title','Posted', 'Company','URL'])], ignore_index=True)
+    dff = pd.concat([dff, pd.DataFrame([[Title, Exp, History, Company, URL]], columns = ['Job Title', 'Experience Required', 'Posted', 'Company','URL'])], ignore_index=True)
     # Second Way using Concat:
     # df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     # df3 = pd.concat([df3, df2], ignore_index=True)
 
     # dff.to_csv("Naukri.com_Data_Collection.csv", index = False)
-    dff.to_excel("All_Output.xlsx", index = False)
+    dff.to_excel("New_Outputs.xlsx", index = False)
     
     print(dff)
 
-    driver.execute_script("window.scrollTo(0, Y)")
+  driver.execute_script("window.scrollTo(0,(document.body.scrollHeight) - 1500)")
 
-    time.sleep(3)
+  time.sleep(0.5)
 
-    driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]/span').click()
-    time.sleep(3)
+  # script = 'your JavaScript goes here'
+  # element = driver.find_element_by_*('your element identifier goes here')
+  # driver.execute_script(script, element)
+  time.sleep(10)
+  driver.find_element(By.XPATH, '/html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]  ').click()
+  # /html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]
+  # //*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]
+  time.sleep(10)
 
 
 
