@@ -2,6 +2,7 @@ import requests
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import time
+import datetime
 import pandas as pd
 import numpy as np
 from selenium.webdriver.common.by import By
@@ -104,7 +105,7 @@ for pages in pages:
     # df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
     # df3 = pd.concat([df3, df2], ignore_index=True)
     # dff.to_csv("Naukri.com_Data_Collection.csv", index = False)
-    dff.to_excel("New_Outputss.xlsx", index = False)
+    dff.to_excel("NaukriJobListing_"+ str(datetime.date.today()) + ".xlsx", index = False)
     
     
   time.sleep(0.5)
