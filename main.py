@@ -108,11 +108,11 @@ for pages in pages:
     dff.to_excel("NaukriJobListing_"+ str(datetime.date.today()) + ".xlsx", index = False)
     
     
-  time.sleep(0.5)
+  # time.sleep(0.5)
 
   driver.execute_script("window.scrollTo(0,(document.body.scrollHeight) - 1500)")
 
-  time.sleep(0.75)
+  # time.sleep(0.75)
 
   # script = 'your JavaScript goes here'
   # element = driver.find_element_by_*('your element identifier goes here')
