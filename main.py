@@ -34,7 +34,7 @@ results = soup.find(class_='list')
 job_elems=results.find_all('article', class_='jobTuple')
 
   # print(job_elems)
-pages = np.arange(1,26)
+pages = np.arange(1,100000)
 
 for pages in pages:
   for job_elem in job_elems:
