@@ -27,12 +27,15 @@ driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div[1]/div/section[2]/div[
 driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div[1]/div/section[2]/div[1]/div[2]/span/span[2]/ul/li[2]').click()
 
 time.sleep(5)
-pages = np.arange(1,50)
+pages = np.arange(1,100000)
 
 for pages in pages:
   soup = BeautifulSoup(driver.page_source,'html5lib')
   results = soup.find(class_='list')
-  job_elems = results.find_all('article', class_='jobTuple')
+  job_elems=results.find_all('article', class_='jobTuple')
+  results = soup.find(class_='list')
+  job_elems=results.find_all('article', class_='jobTuple')
+
   for job_elem in job_elems:
     # Post Title
     T = job_elem.find('a',class_='title ellipsis')
@@ -116,7 +119,7 @@ for pages in pages:
   # /html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]
   # //*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]
 
-  time.sleep(3) # Increase the sleep time if facing the slowness in loading of the next page
+  time.sleep(0.5)
 
 print("*********************CONCLUSION: FINISHED FETCHING DATA FROM NAUKRI.COM*********************")
 
