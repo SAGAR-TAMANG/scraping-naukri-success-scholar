@@ -74,10 +74,10 @@ for pages in pages:
 
     # Date Posted
     D = job_elem.find('span', class_='fleft postedDate')
-    if Date == 'Just Now':
+    if D == 'Just Now':
       Date = 'Today'
     else:
-        Date=D.text
+      Date=D.text
 
     # Rating
     try:
