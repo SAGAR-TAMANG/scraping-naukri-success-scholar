@@ -1,127 +1,119 @@
 import requests
-from selenium import webdriver
-from bs4 import BeautifulSoup
 import time
 import datetime
+import os
+
 import pandas as pd
 import numpy as np
+
 from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from bs4 import BeautifulSoup
 
-dff = pd.DataFrame(columns=['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'Rating', 'Site', 'URL'])
+CHROMEDRIVER_PATH = r'C:\Program Files\chromedriver_win32\chromedriver.exe'
+WINDOW_SIZE = "1920,1080"
+chrome_options = Options()
 
-url = "https://www.naukri.com/jobs-in-india"
-# Observation: Page1: https://www.naukri.com/it-jobs?k=it Page2: https://www.naukri.com/it-jobs-2
+CHROMEDRIVER_PATH = r'C:\Program Files\chromedriver_win32\chromedriver.exe'
+WINDOW_SIZE = "1920,1080"
+chrome_options = Options()
 
-page = requests.get(url)
-# print(page.text)
+# chrome_options.add_argument("--headless")
+chrome_options.binary_location = r"C:\Users\TAMANG\Downloads\Win_1216615_chrome-win\chrome-win\chrome.exe"
+chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
+chrome_options.add_argument('--no-sandbox')
 
-# Making the Driver Headless: (next 3 lines)
-driver = webdriver.Chrome()
+service = Service(CHROMEDRIVER_PATH)
 
-# time.sleep(3)
+def main():
+  dff = pd.DataFrame(columns=['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])
+  driver = webdriver.Chrome(service = service, options = chrome_options)
 
-# driver = webdriver.Chrome()
-driver.get(url)
-time.sleep(3)
-driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div[1]/div/section[2]/div[1]/div[2]/span/span[2]/p').click()
-driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div[1]/div/section[2]/div[1]/div[2]/span/span[2]/ul/li[2]').click()
+  url = "https://www.naukri.com/jobs-in-india"
+  # Observation: Page1: https://www.naukri.com/it-jobs?k=it Page2: https://www.naukri.com/it-jobs-2
+  driver.get(url)
 
-time.sleep(5)
-pages = np.arange(1,50)
 
-for pages in pages:
-  soup = BeautifulSoup(driver.page_source,'html5lib')
-  results = soup.find(class_='list')
-  job_elems = results.find_all('article', class_='jobTuple')
-  for job_elem in job_elems:
-    # Post Title
-    T = job_elem.find('a',class_='title ellipsis')
-    Title=T.text
-    # print("Job Title: " + Title.text)
-    # print(Title)
+  time.sleep(3)
+  try: 
+    driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div[1]/div/section[2]/div[1]/div[2]/span/span[2]/p').click()
+    driver.find_element(By.XPATH, '//*[@id="root"]/div[4]/div[1]/div/section[2]/div[1]/div[2]/span/span[2]/ul/li[2]').click()
+  except Exception as e:
+    pass
 
-    try:
-      i_tag = job_elem.find('i', 'fleft naukicon naukicon-srp-description')
-      D = i_tag.next_sibling.strip()
-      Description = D
-    except Exception as e:
-      Description = None
-    # Experience  
-    E = job_elem.find('span', class_='ellipsis fleft expwdth')
-    if E is None:
-      Exp = "Not-Mentioned"
-    else:
-      Exp = E.text
-    print(Exp)
-    # print('Experience: ' + Exp.text)
-    # print(" "*2)
+  # time.sleep(3)
+  pages = np.arange(1,250)
 
-    # Company
-    C = job_elem.find('a', class_='subTitle ellipsis fleft')
-    Company=C.text
-    # print("Company: " + Company.text)
-    
-    # City
-    try:
-      C = job_elem.find('span', class_='ellipsis fleft locWdth')
-      City=C.text
-    except Exception as e:
-      City = None
+  for pages in pages:
+    soup = BeautifulSoup(driver.page_source,'html5lib')
+    results = soup.find(id='listContainer')
+    job_elems = results.find_all('div', class_='srp-jobtuple-wrapper')
+    for job_elem in job_elems:
+      # Post Title
+      T = job_elem.find('a',class_='title')
+      Title=T.text
 
-    # Salary Range
-    S = job_elem.find('span', class_='ellipsis fleft')
-    Salary=S.text
+      # Description
+      try:
+        D = job_elem.find('span', class_='job-desc')
+        Description = D.text
+      except Exception as e:
+        Description = None
+      
+      # Experience  
+      E = job_elem.find('span', class_='expwdth')
+      if E is None:
+        Exp = "Not-Mentioned"
+      else:
+        Exp = E.text
+      
+      # Company
+      C = job_elem.find('a', class_='comp-name')
+      Company=C.text
+      
+      # City
+      try:
+        C = job_elem.find('span', class_='locWdth')
+        City=C.text
+      except Exception as e:
+        City = None
 
-    # Date Posted
-    D = job_elem.find('span', class_='fleft postedDate')
-    if D == 'Just Now':
-      Date = 'Today'
-    else:
-      Date=D.text
+      # Salary Range
+      S = job_elem.find('span', 'ni-job-tuple-icon ni-job-tuple-icon-srp-rupee sal')
+      Salary=S.text
+      print("Salary: ", Salary)
 
-    # Rating
-    try:
-      i_tag = job_elem.find('i', 'naukicon naukicon-rating-yellow-star fright')
-      R1 = i_tag.next_sibling.strip()
-      Rating = R1
-    except Exception as e:
-      Rating = None
+      # Date Posted
+      D = job_elem.find('span', class_='job-post-day')
+      try: 
+        if D == 'Just Now':
+          Date = 'Today'
+        else:
+          Date=D.text
+      except Exception as e:
+        Date = None      
+      
+      U = job_elem.find('a',class_='title').get('href')
+      URL = U
 
-    # Site
-    S = 'Naukri.com'
-    Site=S
+      dff = pd.concat([dff, pd.DataFrame([[Title, Description, Exp, Company, City, Salary, Date, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'URL'])], ignore_index=True)
+      print(dff)
 
-    U = job_elem.find('a',class_='title ellipsis').get('href')
-    URL = U
-    # print(URL)
+      dff.to_excel(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data', "NaukriJobListing_" + str(datetime.date.today()) + ".xlsx"), index=False)
 
-    # df=df.append({'Title':Title, 'Company':Company,'URL':URL}, ignore_index = True)
-    # df = pd.DataFrame([[Title, Company, URL]], columns=['Title','Company','URL'])
-    dff = pd.concat([dff, pd.DataFrame([[Title, Description, Exp, Company, City, Salary, Date, Rating, Site, URL]], columns = ['Job Title','Description', 'Experience Reqd', 'Company', 'City', 'Salary Range', 'Date Posted', 'Rating', 'Site', 'URL'])], ignore_index=True)
-    print(dff)
-    # Second Way using Concat:
-    # df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
-    # df3 = pd.concat([df3, df2], ignore_index=True)
-    # dff.to_csv("Naukri.com_Data_Collection.csv", index = False)
-    dff.to_excel("NaukriJobListing_"+ str(datetime.date.today()) + ".xlsx", index = False)
-    
-    
-  # time.sleep(0.5)
+    driver.execute_script("window.scrollTo(0,(document.body.scrollHeight) - 1500)")
 
-  driver.execute_script("window.scrollTo(0,(document.body.scrollHeight) - 1500)")
+    time.sleep(0.75)
 
-  # time.sleep(0.75)
+    driver.find_element(By.XPATH, '//*[@id="lastCompMark"]/a[2]/span').click()
 
-  # script = 'your JavaScript goes here'
-  # element = driver.find_element_by_*('your element identifier goes here')
-  # driver.execute_script(script, element)
-  driver.find_element(By.XPATH, '/html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]  ').click()
-  # /html/body/div[1]/div[4]/div/div/section[2]/div[3]/div/a[2]
-  # //*[@id="root"]/div[4]/div/div/section[2]/div[3]/div/a[2]
+    time.sleep(3)
 
-  time.sleep(3) # Increase the sleep time if facing the slowness in loading of the next page
+  print("*********************CONCLUSION: FINISHED FETCHING DATA FROM NAUKRI.COM*********************")
 
-print("*********************CONCLUSION: FINISHED FETCHING DATA FROM NAUKRI.COM*********************")
+  # Closing the Driver
+  driver.close()
 
-# Closing the Driver
-driver.close()
+main()
