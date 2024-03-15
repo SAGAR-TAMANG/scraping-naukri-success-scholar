@@ -110,7 +110,7 @@ To run this code locally, follow these steps.
 - [x] Set up Selenium
 - [x] Scrape job listings
 - [x] Implement data storage
-- [] Improve scraping efficiency
+- [ ] Improve scraping efficiency
 
 See the [open issues](https://github.com/SAGAR-TAMANG/web-scraping-naukri/issues) for a list of proposed features and known issues.
 
