@@ -16,10 +16,6 @@ CHROMEDRIVER_PATH = r'C:\Program Files\chromedriver_win32\chromedriver.exe'
 WINDOW_SIZE = "1920,1080"
 chrome_options = Options()
 
-CHROMEDRIVER_PATH = r'C:\Program Files\chromedriver_win32\chromedriver.exe'
-WINDOW_SIZE = "1920,1080"
-chrome_options = Options()
-
 # chrome_options.add_argument("--headless")
 chrome_options.binary_location = r"C:\Users\TAMANG\Downloads\Win_1216615_chrome-win\chrome-win\chrome.exe"
 chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
@@ -81,9 +77,13 @@ def main():
         City = None
 
       # Salary Range
-      S = job_elem.find('span', 'ni-job-tuple-icon ni-job-tuple-icon-srp-rupee sal')
-      Salary=S.text
-      print("Salary: ", Salary)
+      try:
+        S = job_elem.find('span', 'ni-job-tuple-icon ni-job-tuple-icon-srp-rupee sal')
+        Salary=S.text
+        print("Salary: ", Salary)
+      except Exception as e:
+        Salary = "Not-Mentioned"
+        print("Salary Not Found")
 
       # Date Posted
       D = job_elem.find('span', class_='job-post-day')
